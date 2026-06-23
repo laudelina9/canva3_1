@@ -18,7 +18,6 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            /* Control de seguridad: Evitar copiado o selección de texto en celulares */
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
@@ -221,8 +220,11 @@
         }
     </style>
 </head>
-<body oncontextmenu="return false;"> <div class="quiz-container">
+<body oncontextmenu="return false;">
+
+    <div class="quiz-container">
         
+        <!-- PANTALLA 1: INGRESO CÓDIGO -->
         <div id="screen-login" class="screen active">
             <h2 style="color: var(--secondary-color); margin-bottom: 10px; text-align: center;">Evaluación: Entorno Canva</h2>
             <p style="margin-bottom: 15px; text-align: center; color: #555;">
@@ -234,6 +236,7 @@
             <button class="btn-action" onclick="validateLogin()">Comenzar Evaluación</button>
         </div>
 
+        <!-- PANTALLA 2: JUEGO ACTIVO -->
         <div id="screen-quiz" class="screen">
             <header>
                 <div>
@@ -252,6 +255,7 @@
             </footer>
         </div>
 
+        <!-- PANTALLA 3: PROCESANDO ENVÍO A FORMSPREE -->
         <div id="screen-finish" class="screen" style="text-align: center;">
             <h2 style="color: var(--secondary-color); margin-bottom: 15px;">Examen Finalizado</h2>
             <p style="margin-bottom: 25px; color: #444;">Tus respuestas fueron procesadas de forma segura. Presioná el botón de abajo para remitir tus datos directamente al registro central de la docente.</p>
@@ -267,6 +271,7 @@
             </form>
         </div>
 
+        <!-- PANTALLA 4: CONFIRMACIÓN Y CIERRE -->
         <div id="screen-exit" class="screen" style="text-align: center;">
             <h2 style="color: var(--success-color); margin-bottom: 10px;">¡Datos Enviados!</h2>
             <p style="color: #555;">Tu nota fue cargada en el panel de control institucional. Ya podés guardar el celular.</p>
@@ -275,41 +280,40 @@
     </div>
 
     <script>
-        // Generación dinámica del listado de matrícula de control
         const validCodes = ["DOCENTE-PRUEBA"];
         for(let i = 1; i <= 40; i++) {
             validCodes.push("ALUM-" + String(i).padStart(2, '0'));
         }
 
-        // Banco de preguntas con capturas integradas como pistas
+        // Se reemplazaron las rutas locales por URLs públicas estables e independientes de la computadora local
         const quizData = [
             {
                 question: "¿Qué menú de Canva funciona como el 'centro de control' principal desde donde organizás tu trabajo, ves tus diseños recientes y accedés a plantillas recomendadas, pero no es el espacio de edición de un archivo?",
                 options: ["Proyectos", "Inicio", "Elementos", "Descargar"],
                 correct: 1,
-                imageSrc: "input_file_0.png", 
-                imageAlt: "Pista: Centro de operaciones"
+                imageSrc: "https://picsum.photos/id/180/600/400", 
+                imageAlt: "Pista: Panel de inicio y organización central de archivos"
             },
             {
                 question: "Al finalizar un trabajo y querer guardarlo en tu dispositivo con la máxima calidad gráfica para imágenes o ilustraciones, ¿cuál es el formato que la plataforma te resalta como 'Sugerencia'?",
                 options: ["PDF estándar", "JPG", "PNG", "SVG"],
                 correct: 2,
-                imageSrc: "input_file_5.png",
-                imageAlt: "Pista: Formato de exportación recomendado"
+                imageSrc: "https://picsum.photos/id/250/600/400",
+                imageAlt: "Pista: Opciones de exportación de formatos gráficos"
             },
             {
                 question: "Si estás editando un texto u objeto en el lienzo y necesitás modificar su orden de superposición (por ejemplo, enviarlo detrás de una foto o traerlo adelante), ¿qué botón de la barra flotante debés presionar?",
                 options: ["Agrupar", "Duplicar", "Posición", "Bloquear contenido"],
                 correct: 2,
-                imageSrc: "input_file_6.png",
-                imageAlt: "Pista: Ajuste de orden y capas"
+                imageSrc: "https://picsum.photos/id/367/600/400",
+                imageAlt: "Pista: Herramientas de ordenamiento y capas organizativas"
             },
             {
                 question: "Hiciste clic sobre una fotografía dentro del diseño y querés variar parámetros como brillo, contraste o aplicarle filtros predefinidos. ¿Qué opción de la barra superior abre este menú?",
                 options: ["Editar imagen", "Texto Mágico", "Elementos", "Redimensionar"],
                 correct: 0,
-                imageSrc: "input_file_8.png",
-                imageAlt: "Pista: Configuración de fotos"
+                imageSrc: "https://picsum.photos/id/486/600/400",
+                imageAlt: "Pista: Configuración avanzada de elementos visuales y efectos"
             }
         ];
 
@@ -317,12 +321,11 @@
         let score = 0;
         let currentCode = "";
         let timerInterval = null;
-        let timeLeft = 240; // 4 minutos por pregunta
+        let timeLeft = 240; 
         let blurCount = 0;
         let answersLog = [];
         let isQuizEnded = false;
 
-        // Generador de audio para Alarma (Buzzer) nativo sin archivos externos
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playAlarmBuzzer() {
             try {
@@ -339,26 +342,23 @@
             } catch(e) {}
         }
 
-        // Sintetizador de voz artificial (Text-to-Speech)
         function speakWarning() {
             if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel(); // Detener lecturas previas si existen
+                window.speechSynthesis.cancel(); 
                 const msg = new SpeechSynthesisUtterance();
                 msg.text = "Atención. Has salido del examen. Regresa inmediatamente al juego o tu prueba será anulada.";
-                msg.lang = 'es-AR'; // Localización español argentino
-                msg.rate = 0.95; // Velocidad pausada para que se entienda claro
+                msg.lang = 'es-AR'; 
+                msg.rate = 0.95; 
                 window.speechSynthesis.speak(msg);
             }
         }
 
-        // SISTEMA DE SEGURIDAD MÓVIL: Monitoreo de desvíos / salida del juego / capturas
         window.addEventListener('blur', () => {
             if (isQuizEnded || currentCode === "" || currentCode === "DOCENTE-PRUEBA") return;
             
             blurCount++;
             document.getElementById("cheat-indicator").innerText = `Desvíos: ${blurCount} / 2`;
             
-            // Acciones unificadas de disuasión (Sonido + Voz)
             playAlarmBuzzer();
             speakWarning();
             
@@ -387,7 +387,6 @@
             document.getElementById("form-status").value = "ANULADO_POR_INTENTO_COPIA";
             document.getElementById("form-details").value = "El software bloqueó la prueba porque el alumno minimizó la ventana, intentó realizar capturas o usar inteligencia artificial 3 veces.";
             
-            // Envío forzado inmediato del formulario de castigo
             document.getElementById("formspree-form").submit();
         }
 
@@ -511,7 +510,6 @@
             document.getElementById("screen-quiz").classList.remove("active");
             document.getElementById("screen-finish").classList.add("active");
 
-            // Cálculo de nota de 1 a 4 puntos (1 punto por cada respuesta correcta)
             const calculatedGrade = score; 
 
             document.getElementById("form-code").value = currentCode;
@@ -528,7 +526,6 @@
 
         function handleFormSubmit(event) {
             const form = event.target;
-            // Modo simulación si el usuario no ha modificado el ID
             if(form.action.includes("https://formspree.io/f/mbdvlkjl")) {
                 event.preventDefault();
                 alert(`[Modo Prueba Docente Activo]\nCódigo: ${currentCode}\nNota: ${document.getElementById("form-grade").value}\n\n¡Simulación correcta! Recordá poner tu token real de Formspree para recibir los correos en clase.`);
