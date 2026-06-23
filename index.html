@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulador Ambiental y Digital - Evaluación Final</title>
+    <title>Evaluación Final Digital - Canva</title>
     <style>
         :root {
             --primary-color: #00c4cc;
@@ -46,7 +46,7 @@
             position: relative;
         }
 
-        /* PANTALLA CEGADORA ANTI-CAPTURA IA */
+        /* PANTALLA DE BLOQUEO ABSOLUTO */
         #anti-ai-shield {
             display: none;
             position: fixed;
@@ -237,7 +237,7 @@
 </head>
 <body oncontextmenu="return false;" onkeydown="return false;">
 
-    <!-- PANTALLA DE ANULACIÓN ABSOLUTA -->
+    <!-- ESCUDO TOTAL ANTI-FRAUDE -->
     <div id="anti-ai-shield">
         <h2>⚠️ EXAMEN ANULADO POR FRAUDE ⚠️</h2>
         <p style="font-size: 16px; color: #555; margin-top: 10px;">Acción no autorizada detectada. Los datos han sido remitidos directamente.</p>
@@ -247,9 +247,9 @@
         
         <!-- PANTALLA 1: INGRESO CÓDIGO -->
         <div id="screen-login" class="screen active">
-            <h2 style="color: var(--secondary-color); margin-bottom: 10px; text-align: center;">Evaluación Final Integrada</h2>
+            <h2 style="color: var(--secondary-color); margin-bottom: 10px; text-align: center;">Evaluación: Herramientas Digitales (Canva)</h2>
             <p style="margin-bottom: 15px; text-align: center; color: #555;">
-                Gestión Ambiental y Herramientas Digitales [cite: Explicit request for modular project planning for secondary school students between the ages of 18 and 60. Conversation Date: 2026-04., Request for project ideas and a digital simulator centered on the theme of separating waste at the source and its environmental impact. Conversation Date: 2026-05.]. **ATENCIÓN:** Intentar copiar, capturar pantalla o cambiar de aplicación activará una alerta por voz y bloqueará el juego con nota cero instantáneamente.
+                Examen individual sobre la plataforma de diseño Canva. **SISTEMA BLINDADO:** Salir de la ventana, tomar capturas de pantalla, minimizar o intentar copiar el link bloqueará la prueba con nota cero y activará una alerta por voz.
             </p>
             <label style="font-weight: bold; display: block; margin-bottom: 5px;">Ingresá tu Código de Matrícula:</label>
             <input type="text" id="student-code" placeholder="Ejemplo: ALUM-01">
@@ -261,7 +261,7 @@
         <div id="screen-quiz" class="screen">
             <header>
                 <div>
-                    <h1 id="question-counter">Pregunta 1 de 8</h1>
+                    <h1 id="question-counter">Pregunta 1 de 10</h1>
                 </div>
                 <div class="timer-box" id="timer-display">⏱️ 04:00</div>
             </header>
@@ -303,46 +303,57 @@
         const validCodes = ["DOCENTE-PRUEBA"];
         for(let i = 1; i <= 40; i++) { validCodes.push("ALUM-" + String(i).padStart(2, '0')); }
 
+        // LAS 10 PREGUNTAS EXCLUSIVAS DE CANVA CON SUS GUÍAS VISUALES
         const quizData = [
-            {
-                question: "Para realizar una correcta separación de residuos en origen, ¿qué tipo de materiales debemos depositar de forma exclusiva en el contenedor verde de reciclables?",
-                options: ["Restos de comida, yerba usada y cáscaras de frutas", "Plásticos limpios, cartón seco, papeles, vidrios y metales", "Pañales, lámparas rotas, cerámicas y papeles húmedos", "Pilas usadas, baterías de celular y medicamentos vencidos"],
-                correct: 1, hasImage: false, imageSrc: "", imageAlt: ""
-            },
-            {
-                question: "Al separar cartones o envases plásticos para el reciclaje, ¿cuál es el requisito indispensable que deben cumplir para no arruinar el resto del lote en el contenedor?",
-                options: ["Estar cortados en pedazos pequeños", "Tener pegada la etiqueta original de compra", "Estar completamente limpios y secos, sin restos de líquidos o grasa", "Haber sido desinfectados con lavandina destilada"],
-                correct: 2, hasImage: false, imageSrc: "", imageAlt: ""
-            },
-            {
-                question: "Dentro de los hogares, los restos de origen vegetal (como cáscaras de verduras, frutas y hojas secas) pueden valorizarse en lugar de tirarse a la basura común. ¿Cómo se denomina este proceso biológico?",
-                options: ["Incineración controlada", "Compostaje orgánico", "Biodegradación química", "Clasificación inerte"],
-                correct: 1, hasImage: false, imageSrc: "", imageAlt: ""
-            },
-            {
-                question: "Cuál es el principal impacto negativo en el medio ambiente cuando los residuos reciclables se mezclan con la basura orgánica y terminan todos juntos en un basural a cielo abierto?",
-                options: ["Se acelera la evaporación del agua de lluvia", "Se generan gases de efecto invernadero (como el metano) y lixiviados que contaminan napas de agua", "Disminuye la reproducción de insectos locales", "El suelo absorbe más nutrientes artificiales"],
-                correct: 1, hasImage: false, imageSrc: "", imageAlt: ""
-            },
             {
                 question: "¿Qué menú de Canva funciona como el 'centro de control' principal desde donde organizás tu trabajo, ves tus diseños recientes y accedés a plantillas recomendadas, pero no es el espacio de edición de un archivo?",
                 options: ["Proyectos", "Inicio", "Elementos", "Descargar"],
-                correct: 1, hasImage: true, imageSrc: "https://picsum.photos/id/180/600/400", imageAlt: "Pista: Panel de inicio"
+                correct: 1, hasImage: true, imageSrc: "https://picsum.photos/id/180/600/400", imageAlt: "Guía: Panel de Inicio"
             },
             {
                 question: "Al finalizar un trabajo y querer guardarlo en tu dispositivo con la máxima calidad gráfica para imágenes o ilustraciones, ¿cuál es el formato que la plataforma te resalta como 'Sugerencia'?",
                 options: ["PDF estándar", "JPG", "PNG", "SVG"],
-                correct: 2, hasImage: true, imageSrc: "https://picsum.photos/id/250/600/400", imageAlt: "Pista: Formatos"
+                correct: 2, hasImage: true, imageSrc: "https://picsum.photos/id/250/600/400", imageAlt: "Guía: Formatos de Descarga"
             },
             {
                 question: "Si estás editando un texto u objeto en el lienzo y necesitás modificar su orden de superposición (por ejemplo, enviarlo detrás de una foto o traerlo adelante), ¿qué botón de la barra flotante debés presionar?",
                 options: ["Agrupar", "Duplicar", "Posición", "Bloquear contenido"],
-                correct: 2, hasImage: true, imageSrc: "https://picsum.photos/id/367/600/400", imageAlt: "Pista: Botón posición"
+                correct: 2, hasImage: true, imageSrc: "https://picsum.photos/id/367/600/400", imageAlt: "Guía: Organización de Capas"
             },
             {
                 question: "Hiciste clic sobre una fotografía dentro del diseño y querés variar parámetros como brillo, contraste o aplicarle filtros predefinidos. ¿Qué opción de la barra superior abre este menú?",
                 options: ["Editar imagen", "Texto Mágico", "Elementos", "Redimensionar"],
-                correct: 0, hasImage: true, imageSrc: "https://picsum.photos/id/486/600/400", imageAlt: "Pista: Editar imagen"
+                correct: 0, hasImage: true, imageSrc: "https://picsum.photos/id/486/600/400", imageAlt: "Guía: Ajustes de Imagen"
+            },
+            {
+                question: "¿Cómo hacés para invitar a otros compañeros a editar tu folleto digital en tiempo real o permitirle a la docente ver tus avances sin descargar el archivo?",
+                options: ["Presionando el botón 'Compartir' e ingresando sus correos o copiando el enlace de colaboración", "Copiando la dirección URL de la barra superior del navegador", "Haciendo clic derecho sobre la hoja de trabajo", "Presionando el botón 'Imprimir tus diseños'"],
+                correct: 0, hasImage: true, imageSrc: "https://picsum.photos/id/370/600/400", imageAlt: "Guía: Trabajo Colaborativo"
+            },
+            {
+                question: "Si querés agregar cuadrados, líneas, flechas o buscar stickers vectoriales para decorar tu diseño en Canva, ¿en qué sección del menú lateral izquierdo debés buscar?",
+                options: ["Texto", "Diseño", "Elementos", "Subidos"],
+                correct: 2, hasImage: true, imageSrc: "https://picsum.photos/id/445/600/400", imageAlt: "Guía: Agregar Formas"
+            },
+            {
+                question: "Necesitás incorporar al folleto una foto propia que sacaste con tu celular. ¿Qué pestaña del panel izquierdo te permite subir tus propios archivos multimedia a la nube de Canva?",
+                options: ["Proyectos", "Subidos", "Apps", "Dibujo"],
+                correct: 1, hasImage: true, imageSrc: "https://picsum.photos/id/201/600/400", imageAlt: "Guía: Archivos Propios"
+            },
+            {
+                question: "Cuando seleccionás un bloque de texto en tu espacio de trabajo, ¿en qué parte de la pantalla aparece la barra de herramientas para cambiar la tipografía, el tamaño de la letra y el color?",
+                options: ["En la barra flotante de la parte inferior de la app móvil", "En la barra horizontal superior justo arriba del lienzo", "En el menú de configuración de tu cuenta", "Aparece únicamente al descargar el archivo"],
+                correct: 1, hasImage: true, imageSrc: "https://picsum.photos/id/160/600/400", imageAlt: "Guía: Formato de Texto"
+            },
+            {
+                question: "Si estás trabajando en un diseño y cometés un error (por ejemplo, borrás un texto sin querer), ¿qué combinación estándar de teclas en la computadora o botón superior te permite deshacer la última acción?",
+                options: ["Control + Z (o la flecha curva hacia la izquierda)", "Control + C (o la flecha hacia la derecha)", "Control + Alt + Del", "F5 (o recargar la página)"],
+                correct: 0, hasImage: true, imageSrc: "https://picsum.photos/id/64/600/400", imageAlt: "Guía: Historial y Deshacer"
+            },
+            {
+                question: "¿Cuál es una de las principales ventajas operativas que ofrece Canva al trabajar directamente desde el navegador de internet o la app del celular?",
+                options: ["Que requiere instalar un disco rígido externo para que funcione", "Que los cambios se guardan automáticamente cada pocos segundos en la nube sin necesidad de apretar 'Guardar'", "Que convierte automáticamente todos los textos en videos interactivos", "Que borra los archivos viejos de forma obligatoria cada 24 horas"],
+                correct: 1, hasImage: true, imageSrc: "https://picsum.photos/id/338/600/400", imageAlt: "Guía: Almacenamiento en Nube"
             }
         ];
 
@@ -354,20 +365,18 @@
         let answersLog = [];
         let isQuizEnded = false;
 
-        // FUNCIÓN ACTIVA DE ALERTA POR VOZ MANDATORIA
         function emitVoiceWarning() {
             if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel(); // Detiene cualquier audio en cola
+                window.speechSynthesis.cancel();
                 const utterance = new SpeechSynthesisUtterance();
                 utterance.text = "Infracción detectada. El examen ha sido bloqueado por intento de fraude.";
-                utterance.lang = 'es-AR'; // Español rioplatense / argentino
-                utterance.volume = 1.0;   // Volumen al máximo permitido por el navegador
-                utterance.rate = 0.95;    // Velocidad firme y clara
+                utterance.lang = 'es-AR';
+                utterance.volume = 1.0;
+                utterance.rate = 0.95;
                 window.speechSynthesis.speak(utterance);
             }
         }
 
-        // CONTROL DE FRAUDE POR COPIA/COMPARTIR TEXTO
         document.addEventListener('copy', (e) => {
             if (currentCode !== "" && currentCode !== "DOCENTE-PRUEBA") {
                 e.preventDefault();
@@ -375,20 +384,15 @@
             }
         });
 
-        // BLOQUEO ABSOLUTO, CEGADO VISUAL Y MENSAJE HABLADO
         function triggerImmediateAnnihilation(reason = "SALIDA_DEL_ENTORNO") {
             if (isQuizEnded || currentCode === "" || currentCode === "DOCENTE-PRUEBA") return;
             
             isQuizEnded = true;
             clearInterval(timerInterval);
             
-            // 1. Activa la pantalla ciega blanca
             document.getElementById("anti-ai-shield").style.display = "flex";
-            
-            // 2. Ejecuta la advertencia por voz robótica a todo volumen
             emitVoiceWarning();
             
-            // 3. Ajusta los estados del reporte
             document.getElementById("finish-title").innerText = "❌ EXAMEN ANULADO (NOTA 0)";
             document.getElementById("finish-text").innerText = "El software bloqueó irreversiblemente la prueba por salir de la pantalla, intentar copiar o capturar elementos.";
             
@@ -400,13 +404,11 @@
             document.getElementById("form-incorrect").value = quizData.length;
             document.getElementById("form-grade").value = "0 / 10 (REPROBADO POR INTENTO DE FRAUDE)";
             document.getElementById("form-status").value = reason;
-            document.getElementById("form-details").value = "El alumno activó la seguridad al cambiar de pestaña, capturar pantalla o intentar duplicar la URL.";
+            document.getElementById("form-details").value = "El alumno activó la seguridad al capturar pantalla, minimizar o duplicar enlaces de forma externa.";
             
-            // Envia de inmediato de forma automatizada
             document.getElementById("formspree-form").submit();
         }
 
-        // Sensores de pérdida de foco para celulares y computadoras
         window.addEventListener('blur', () => triggerImmediateAnnihilation("DESENFOQUE_VENTANA"));
         document.addEventListener('visibilitychange', () => {
             if (document.visibilityState === 'hidden') {
@@ -425,7 +427,6 @@
                 document.getElementById("screen-login").classList.remove("active");
                 document.getElementById("screen-quiz").classList.add("active");
                 
-                // Activa el motor de voz con un sonido silencioso inicial para "despertar" el permiso de audio en el celular
                 if ('speechSynthesis' in window) {
                     const setupUtterance = new SpeechSynthesisUtterance("");
                     window.speechSynthesis.speak(setupUtterance);
@@ -488,13 +489,13 @@
                 layoutStyle = '';
                 mediaHTML = `
                     <div class="image-wrapper">
-                        <span>🔍 Captura de pantalla de la guía (Pista)</span>
+                        <span>🔍 Captura Interactiva / Pista de la Interfaz</span>
                         <img src="${q.imageSrc}" alt="${q.imageAlt}" class="hint-image">
                     </div>
                 `;
                 document.getElementById("footer-context-text").innerText = "Mirá atentamente la imagen analítica de Canva";
             } else {
-                document.getElementById("footer-context-text").innerText = "Analizá el escenario ambiental detallado arriba";
+                document.getElementById("footer-context-text").innerText = "Analizá el escenario digital planteado";
             }
 
             document.getElementById("quiz-dynamic-content").innerHTML = `
@@ -566,7 +567,7 @@
             const form = event.target;
             if(form.action.includes("https://formspree.io/f/mbdvlkjl")) {
                 event.preventDefault();
-                alert(`[Modo Prueba Docente]\nCódigo: ${currentCode}\nNota: ${document.getElementById("form-grade").value}\n\n¡Simulación correcta! Recordá cambiar 'TU_ID_DE_FORMSPREE' por tu ID real para recibir el reporte final.`);
+                alert(`[Modo Prueba Docente]\nCódigo: ${currentCode}\nNota: ${document.getElementById("form-grade").value}\n\n¡Simulación correcta! Acordate de cambiar 'TU_ID_DE_FORMSPREE' por tu ID real de Formspree.`);
                 document.getElementById("screen-finish").classList.remove("active");
                 document.getElementById("screen-exit").classList.add("active");
             }
@@ -574,4 +575,3 @@
     </script>
 </body>
 </html>
-
