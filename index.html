@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Desafío Blindado de Canva - Evaluación de Prácticas Digitales</title>
+    <title>Simulador Ambiental y Digital - Evaluación Final</title>
     <style>
         :root {
             --primary-color: #00c4cc;
@@ -41,8 +41,29 @@
             border-radius: 14px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
             width: 100%;
-            max-width: 800px;
+            max-width: 850px;
             padding: 25px;
+            position: relative;
+        }
+
+        /* PANTALLA CEGADORA ANTI-CAPTURA IA */
+        #anti-ai-shield {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #ffffff;
+            z-index: 99999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: var(--danger-color);
+            font-weight: bold;
+            font-size: 24px;
+            text-align: center;
+            padding: 20px;
         }
 
         header {
@@ -53,11 +74,6 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-        }
-
-        .header-title h1 {
-            font-size: 20px;
-            color: var(--secondary-color);
         }
 
         .timer-box {
@@ -127,6 +143,10 @@
             padding: 8px;
             text-align: center;
             background: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         .image-wrapper span {
@@ -139,7 +159,7 @@
 
         .hint-image {
             max-width: 100%;
-            max-height: 280px;
+            max-height: 260px;
             object-fit: contain;
             border-radius: 4px;
         }
@@ -203,11 +223,6 @@
             width: 100%;
         }
 
-        .btn-action:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-        }
-
         footer {
             margin-top: 15px;
             padding-top: 12px;
@@ -220,28 +235,33 @@
         }
     </style>
 </head>
-<body oncontextmenu="return false;">
+<body oncontextmenu="return false;" onkeydown="return false;">
+
+    <!-- PANTALLA DE ANULACIÓN ABSOLUTA -->
+    <div id="anti-ai-shield">
+        <h2>⚠️ EXAMEN ANULADO POR FRAUDE ⚠️</h2>
+        <p style="font-size: 16px; color: #555; margin-top: 10px;">Acción no autorizada detectada. Los datos han sido remitidos directamente.</p>
+    </div>
 
     <div class="quiz-container">
         
         <!-- PANTALLA 1: INGRESO CÓDIGO -->
         <div id="screen-login" class="screen active">
-            <h2 style="color: var(--secondary-color); margin-bottom: 10px; text-align: center;">Evaluación: Entorno Canva</h2>
+            <h2 style="color: var(--secondary-color); margin-bottom: 10px; text-align: center;">Evaluación Final Integrada</h2>
             <p style="margin-bottom: 15px; text-align: center; color: #555;">
-                Ingresá tu código personal asignado (Ej: ALUM-01) para iniciar tu examen. Cada pregunta posee un límite de 4 minutos.
+                Gestión Ambiental y Herramientas Digitales [cite: Explicit request for modular project planning for secondary school students between the ages of 18 and 60. Conversation Date: 2026-04., Request for project ideas and a digital simulator centered on the theme of separating waste at the source and its environmental impact. Conversation Date: 2026-05.]. **ATENCIÓN:** Intentar copiar, capturar pantalla o cambiar de aplicación activará una alerta por voz y bloqueará el juego con nota cero instantáneamente.
             </p>
-            <label style="font-weight: bold; display: block; margin-bottom: 5px;">Código de Alumno:</label>
-            <input type="text" id="student-code" placeholder="Escribí tu código acá...">
-            <div id="login-alert" style="color: var(--danger-color); font-weight: bold; margin-bottom: 10px; display: none; text-align: center;">El código ingresado no pertenece a la matrícula activa.</div>
-            <button class="btn-action" onclick="validateLogin()">Comenzar Evaluación</button>
+            <label style="font-weight: bold; display: block; margin-bottom: 5px;">Ingresá tu Código de Matrícula:</label>
+            <input type="text" id="student-code" placeholder="Ejemplo: ALUM-01">
+            <div id="login-alert" style="color: var(--danger-color); font-weight: bold; margin-bottom: 10px; display: none; text-align: center;">El código ingresado no pertenece a la nómina activa.</div>
+            <button class="btn-action" onclick="validateLogin()">Iniciar Evaluación</button>
         </div>
 
         <!-- PANTALLA 2: JUEGO ACTIVO -->
         <div id="screen-quiz" class="screen">
             <header>
                 <div>
-                    <h1 id="question-counter">Pregunta 1 de 4</h1>
-                    <span id="cheat-indicator" style="font-size: 12px; font-weight: bold; color: var(--danger-color);">Desvíos: 0 / 2</span>
+                    <h1 id="question-counter">Pregunta 1 de 8</h1>
                 </div>
                 <div class="timer-box" id="timer-display">⏱️ 04:00</div>
             </header>
@@ -250,15 +270,15 @@
             <div id="quiz-dynamic-content"></div>
 
             <footer>
-                <span>Mirá atentamente la imagen analítica de Canva</span>
+                <span id="footer-context-text">Analizá bien la consigna antes de responder</span>
                 <button class="btn-action" id="next-btn" onclick="nextQuestion()" disabled style="width: auto; padding: 10px 20px;">Siguiente</button>
             </footer>
         </div>
 
         <!-- PANTALLA 3: PROCESANDO ENVÍO A FORMSPREE -->
         <div id="screen-finish" class="screen" style="text-align: center;">
-            <h2 style="color: var(--secondary-color); margin-bottom: 15px;">Examen Finalizado</h2>
-            <p style="margin-bottom: 25px; color: #444;">Tus respuestas fueron procesadas de forma segura. Presioná el botón de abajo para remitir tus datos directamente al registro central de la docente.</p>
+            <h2 style="color: var(--danger-color); margin-bottom: 15px;" id="finish-title">Examen Finalizado</h2>
+            <p style="margin-bottom: 25px; color: #444;" id="finish-text">Procesando datos...</p>
             
             <form id="formspree-form" action="https://formspree.io/f/TU_ID_DE_FORMSPREE" method="POST" onsubmit="handleFormSubmit(event)">
                 <input type="hidden" name="CodigoAlumno" id="form-code">
@@ -267,53 +287,62 @@
                 <input type="hidden" name="Incorrectas" id="form-incorrect">
                 <input type="hidden" name="EstadoExamen" id="form-status" value="COMPLETADO_EXITOSO">
                 <input type="hidden" name="BitacoraDetallada" id="form-details">
-                <button type="submit" class="btn-action" style="background-color: var(--dark-color);">Enviar Calificación Completa</button>
+                <button type="submit" class="btn-action" id="submit-btn" style="background-color: var(--dark-color);">Enviar Calificación</button>
             </form>
         </div>
 
         <!-- PANTALLA 4: CONFIRMACIÓN Y CIERRE -->
         <div id="screen-exit" class="screen" style="text-align: center;">
-            <h2 style="color: var(--success-color); margin-bottom: 10px;">¡Datos Enviados!</h2>
-            <p style="color: #555;">Tu nota fue cargada en el panel de control institucional. Ya podés guardar el celular.</p>
+            <h2 style="color: var(--success-color); margin-bottom: 10px;">¡Examen Recibido con Éxito!</h2>
+            <p style="color: #555;">La nota fue cargada en el panel de la docente. Podés apagar la pantalla.</p>
         </div>
 
     </div>
 
     <script>
         const validCodes = ["DOCENTE-PRUEBA"];
-        for(let i = 1; i <= 40; i++) {
-            validCodes.push("ALUM-" + String(i).padStart(2, '0'));
-        }
+        for(let i = 1; i <= 40; i++) { validCodes.push("ALUM-" + String(i).padStart(2, '0')); }
 
-        // Se reemplazaron las rutas locales por URLs públicas estables e independientes de la computadora local
         const quizData = [
+            {
+                question: "Para realizar una correcta separación de residuos en origen, ¿qué tipo de materiales debemos depositar de forma exclusiva en el contenedor verde de reciclables?",
+                options: ["Restos de comida, yerba usada y cáscaras de frutas", "Plásticos limpios, cartón seco, papeles, vidrios y metales", "Pañales, lámparas rotas, cerámicas y papeles húmedos", "Pilas usadas, baterías de celular y medicamentos vencidos"],
+                correct: 1, hasImage: false, imageSrc: "", imageAlt: ""
+            },
+            {
+                question: "Al separar cartones o envases plásticos para el reciclaje, ¿cuál es el requisito indispensable que deben cumplir para no arruinar el resto del lote en el contenedor?",
+                options: ["Estar cortados en pedazos pequeños", "Tener pegada la etiqueta original de compra", "Estar completamente limpios y secos, sin restos de líquidos o grasa", "Haber sido desinfectados con lavandina destilada"],
+                correct: 2, hasImage: false, imageSrc: "", imageAlt: ""
+            },
+            {
+                question: "Dentro de los hogares, los restos de origen vegetal (como cáscaras de verduras, frutas y hojas secas) pueden valorizarse en lugar de tirarse a la basura común. ¿Cómo se denomina este proceso biológico?",
+                options: ["Incineración controlada", "Compostaje orgánico", "Biodegradación química", "Clasificación inerte"],
+                correct: 1, hasImage: false, imageSrc: "", imageAlt: ""
+            },
+            {
+                question: "Cuál es el principal impacto negativo en el medio ambiente cuando los residuos reciclables se mezclan con la basura orgánica y terminan todos juntos en un basural a cielo abierto?",
+                options: ["Se acelera la evaporación del agua de lluvia", "Se generan gases de efecto invernadero (como el metano) y lixiviados que contaminan napas de agua", "Disminuye la reproducción de insectos locales", "El suelo absorbe más nutrientes artificiales"],
+                correct: 1, hasImage: false, imageSrc: "", imageAlt: ""
+            },
             {
                 question: "¿Qué menú de Canva funciona como el 'centro de control' principal desde donde organizás tu trabajo, ves tus diseños recientes y accedés a plantillas recomendadas, pero no es el espacio de edición de un archivo?",
                 options: ["Proyectos", "Inicio", "Elementos", "Descargar"],
-                correct: 1,
-                imageSrc: "https://picsum.photos/id/180/600/400", 
-                imageAlt: "Pista: Panel de inicio y organización central de archivos"
+                correct: 1, hasImage: true, imageSrc: "https://picsum.photos/id/180/600/400", imageAlt: "Pista: Panel de inicio"
             },
             {
                 question: "Al finalizar un trabajo y querer guardarlo en tu dispositivo con la máxima calidad gráfica para imágenes o ilustraciones, ¿cuál es el formato que la plataforma te resalta como 'Sugerencia'?",
                 options: ["PDF estándar", "JPG", "PNG", "SVG"],
-                correct: 2,
-                imageSrc: "https://picsum.photos/id/250/600/400",
-                imageAlt: "Pista: Opciones de exportación de formatos gráficos"
+                correct: 2, hasImage: true, imageSrc: "https://picsum.photos/id/250/600/400", imageAlt: "Pista: Formatos"
             },
             {
                 question: "Si estás editando un texto u objeto en el lienzo y necesitás modificar su orden de superposición (por ejemplo, enviarlo detrás de una foto o traerlo adelante), ¿qué botón de la barra flotante debés presionar?",
                 options: ["Agrupar", "Duplicar", "Posición", "Bloquear contenido"],
-                correct: 2,
-                imageSrc: "https://picsum.photos/id/367/600/400",
-                imageAlt: "Pista: Herramientas de ordenamiento y capas organizativas"
+                correct: 2, hasImage: true, imageSrc: "https://picsum.photos/id/367/600/400", imageAlt: "Pista: Botón posición"
             },
             {
                 question: "Hiciste clic sobre una fotografía dentro del diseño y querés variar parámetros como brillo, contraste o aplicarle filtros predefinidos. ¿Qué opción de la barra superior abre este menú?",
                 options: ["Editar imagen", "Texto Mágico", "Elementos", "Redimensionar"],
-                correct: 0,
-                imageSrc: "https://picsum.photos/id/486/600/400",
-                imageAlt: "Pista: Configuración avanzada de elementos visuales y efectos"
+                correct: 0, hasImage: true, imageSrc: "https://picsum.photos/id/486/600/400", imageAlt: "Pista: Editar imagen"
             }
         ];
 
@@ -322,60 +351,46 @@
         let currentCode = "";
         let timerInterval = null;
         let timeLeft = 240; 
-        let blurCount = 0;
         let answersLog = [];
         let isQuizEnded = false;
 
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        function playAlarmBuzzer() {
-            try {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(850, audioCtx.currentTime);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-                osc.start();
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.6);
-                osc.stop(audioCtx.currentTime + 0.6);
-            } catch(e) {}
-        }
-
-        function speakWarning() {
+        // FUNCIÓN ACTIVA DE ALERTA POR VOZ MANDATORIA
+        function emitVoiceWarning() {
             if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel(); 
-                const msg = new SpeechSynthesisUtterance();
-                msg.text = "Atención. Has salido del examen. Regresa inmediatamente al juego o tu prueba será anulada.";
-                msg.lang = 'es-AR'; 
-                msg.rate = 0.95; 
-                window.speechSynthesis.speak(msg);
+                window.speechSynthesis.cancel(); // Detiene cualquier audio en cola
+                const utterance = new SpeechSynthesisUtterance();
+                utterance.text = "Infracción detectada. El examen ha sido bloqueado por intento de fraude.";
+                utterance.lang = 'es-AR'; // Español rioplatense / argentino
+                utterance.volume = 1.0;   // Volumen al máximo permitido por el navegador
+                utterance.rate = 0.95;    // Velocidad firme y clara
+                window.speechSynthesis.speak(utterance);
             }
         }
 
-        window.addEventListener('blur', () => {
-            if (isQuizEnded || currentCode === "" || currentCode === "DOCENTE-PRUEBA") return;
-            
-            blurCount++;
-            document.getElementById("cheat-indicator").innerText = `Desvíos: ${blurCount} / 2`;
-            
-            playAlarmBuzzer();
-            speakWarning();
-            
-            if (blurCount === 1) {
-                alert("⚠️ DETECCIÓN DE ACCIÓN EXTERNA: Saliste de la pantalla de evaluación. Recordá que no podés buscar en Google ni usar IA. Primer aviso.");
-            } else if (blurCount === 2) {
-                alert("⚠️ ÚLTIMA ADVERTENCIA: Si salís nuevamente del entorno, el sistema ejecutará el cierre automático asignando nota cero.");
-            } else if (blurCount >= 3) {
-                triggerAutoFailByCheat();
+        // CONTROL DE FRAUDE POR COPIA/COMPARTIR TEXTO
+        document.addEventListener('copy', (e) => {
+            if (currentCode !== "" && currentCode !== "DOCENTE-PRUEBA") {
+                e.preventDefault();
+                triggerImmediateAnnihilation("FRAUDE_POR_COPIA");
             }
         });
 
-        function triggerAutoFailByCheat() {
+        // BLOQUEO ABSOLUTO, CEGADO VISUAL Y MENSAJE HABLADO
+        function triggerImmediateAnnihilation(reason = "SALIDA_DEL_ENTORNO") {
+            if (isQuizEnded || currentCode === "" || currentCode === "DOCENTE-PRUEBA") return;
+            
             isQuizEnded = true;
             clearInterval(timerInterval);
             
-            alert("❌ EXAMEN ANULADO: Infracción reiterada a las normas de seguridad. Tu examen se cierra con nota 0.");
+            // 1. Activa la pantalla ciega blanca
+            document.getElementById("anti-ai-shield").style.display = "flex";
+            
+            // 2. Ejecuta la advertencia por voz robótica a todo volumen
+            emitVoiceWarning();
+            
+            // 3. Ajusta los estados del reporte
+            document.getElementById("finish-title").innerText = "❌ EXAMEN ANULADO (NOTA 0)";
+            document.getElementById("finish-text").innerText = "El software bloqueó irreversiblemente la prueba por salir de la pantalla, intentar copiar o capturar elementos.";
             
             document.getElementById("screen-quiz").classList.remove("active");
             document.getElementById("screen-finish").classList.add("active");
@@ -383,12 +398,21 @@
             document.getElementById("form-code").value = currentCode;
             document.getElementById("form-correct").value = 0;
             document.getElementById("form-incorrect").value = quizData.length;
-            document.getElementById("form-grade").value = "1 / 4 (ANULADO POR TRAMPA)";
-            document.getElementById("form-status").value = "ANULADO_POR_INTENTO_COPIA";
-            document.getElementById("form-details").value = "El software bloqueó la prueba porque el alumno minimizó la ventana, intentó realizar capturas o usar inteligencia artificial 3 veces.";
+            document.getElementById("form-grade").value = "0 / 10 (REPROBADO POR INTENTO DE FRAUDE)";
+            document.getElementById("form-status").value = reason;
+            document.getElementById("form-details").value = "El alumno activó la seguridad al cambiar de pestaña, capturar pantalla o intentar duplicar la URL.";
             
+            // Envia de inmediato de forma automatizada
             document.getElementById("formspree-form").submit();
         }
+
+        // Sensores de pérdida de foco para celulares y computadoras
+        window.addEventListener('blur', () => triggerImmediateAnnihilation("DESENFOQUE_VENTANA"));
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'hidden') {
+                triggerImmediateAnnihilation("CAMBIO_PESTAÑA_O_MINIMIZADO");
+            }
+        });
 
         function validateLogin() {
             const inputField = document.getElementById("student-code");
@@ -398,9 +422,14 @@
             if (validCodes.includes(code)) {
                 currentCode = code;
                 alertBox.style.display = "none";
-                
                 document.getElementById("screen-login").classList.remove("active");
                 document.getElementById("screen-quiz").classList.add("active");
+                
+                // Activa el motor de voz con un sonido silencioso inicial para "despertar" el permiso de audio en el celular
+                if ('speechSynthesis' in window) {
+                    const setupUtterance = new SpeechSynthesisUtterance("");
+                    window.speechSynthesis.speak(setupUtterance);
+                }
                 
                 loadQuestion();
             } else {
@@ -416,13 +445,11 @@
             timerInterval = setInterval(() => {
                 timeLeft--;
                 updateTimerDisplay();
-
                 if(timeLeft <= 20) {
                     document.getElementById("timer-display").classList.add("timer-warn");
                 } else {
                     document.getElementById("timer-display").classList.remove("timer-warn");
                 }
-
                 if(timeLeft <= 0) {
                     clearInterval(timerInterval);
                     handleTimeOut();
@@ -437,13 +464,11 @@
         }
 
         function handleTimeOut() {
-            alert("⏰ Tiempo límite agotado (4 minutos). Esta pregunta se procesa como incorrecta.");
+            alert("⏰ Tiempo límite agotado. Esta pregunta se procesa como incorrecta.");
             const currentQuestion = quizData[currentQuestionIdx];
             const buttons = document.querySelectorAll('.option-btn');
-            
             buttons.forEach(b => b.disabled = true);
             buttons[currentQuestion.correct].classList.add('correct');
-            
             answersLog.push({ questionId: currentQuestionIdx + 1, selection: "TIEMPO_EXPIRADO", result: "INCORRECTA" });
             document.getElementById("next-btn").disabled = false;
         }
@@ -456,13 +481,26 @@
             document.getElementById("progress-bar").style.width = `${(currentQuestionIdx / quizData.length) * 100}%`;
             document.getElementById("next-btn").disabled = true;
 
-            document.getElementById("quiz-dynamic-content").innerHTML = `
-                <div class="question-text">${q.question}</div>
-                <div class="content-layout">
+            let mediaHTML = "";
+            let layoutStyle = 'grid-template-columns: 1fr;';
+
+            if (q.hasImage) {
+                layoutStyle = '';
+                mediaHTML = `
                     <div class="image-wrapper">
                         <span>🔍 Captura de pantalla de la guía (Pista)</span>
                         <img src="${q.imageSrc}" alt="${q.imageAlt}" class="hint-image">
                     </div>
+                `;
+                document.getElementById("footer-context-text").innerText = "Mirá atentamente la imagen analítica de Canva";
+            } else {
+                document.getElementById("footer-context-text").innerText = "Analizá el escenario ambiental detallado arriba";
+            }
+
+            document.getElementById("quiz-dynamic-content").innerHTML = `
+                <div class="question-text">${q.question}</div>
+                <div class="content-layout" style="${layoutStyle}">
+                    ${mediaHTML}
                     <div>
                         <ul class="options-list">
                             ${q.options.map((opt, i) => `
@@ -510,12 +548,12 @@
             document.getElementById("screen-quiz").classList.remove("active");
             document.getElementById("screen-finish").classList.add("active");
 
-            const calculatedGrade = score; 
+            const calculatedGrade = Math.round((score / quizData.length) * 10); 
 
             document.getElementById("form-code").value = currentCode;
             document.getElementById("form-correct").value = score;
             document.getElementById("form-incorrect").value = quizData.length - score;
-            document.getElementById("form-grade").value = `${calculatedGrade} / 4 Puntos Totales`;
+            document.getElementById("form-grade").value = `Nota: ${calculatedGrade} / 10 (${score} de ${quizData.length} correctas)`;
             
             let logString = "";
             answersLog.forEach(l => {
@@ -528,7 +566,7 @@
             const form = event.target;
             if(form.action.includes("https://formspree.io/f/mbdvlkjl")) {
                 event.preventDefault();
-                alert(`[Modo Prueba Docente Activo]\nCódigo: ${currentCode}\nNota: ${document.getElementById("form-grade").value}\n\n¡Simulación correcta! Recordá poner tu token real de Formspree para recibir los correos en clase.`);
+                alert(`[Modo Prueba Docente]\nCódigo: ${currentCode}\nNota: ${document.getElementById("form-grade").value}\n\n¡Simulación correcta! Recordá cambiar 'TU_ID_DE_FORMSPREE' por tu ID real para recibir el reporte final.`);
                 document.getElementById("screen-finish").classList.remove("active");
                 document.getElementById("screen-exit").classList.add("active");
             }
